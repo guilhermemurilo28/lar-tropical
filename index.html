@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lar Tropical — Guia do Hóspede</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== TOKENS ===== */
+    :root {
+      --ocean:       #1A5F6A;
+      --ocean-mid:   #2A7A88;
+      --ocean-light: #EBF6F8;
+      --sand:        #F0E6CC;
+      --cliff:       #C47B45;
+      --palm:        #2D6B45;
+      --cream:       #FAF9F5;
+      --dark:        #1C1C1C;
+      --mid:         #5A5A5A;
+      --radius:      12px;
+      --radius-lg:   24px;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Nunito', system-ui, sans-serif;
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(26, 95, 106, 0.96);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 24px rgba(0,0,0,0.18);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: white;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('hero.jpg');
+      background-size: cover;
+      background-position: center 40%;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(0,0,0,0.08) 0%,
+        rgba(0,0,0,0.35) 55%,
+        rgba(26, 95, 106, 0.72) 100%
+      );
+    }
+    .hero-content {
+      position: relative;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+      max-width: 720px;
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 700;
+      opacity: 0.75;
+      margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 9vw, 6rem);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 1.25rem;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.25);
+      letter-spacing: -0.01em;
+    }
+    .hero-subtitle {
+      font-size: 1.1rem;
+      font-weight: 300;
+      opacity: 0.88;
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-cta {
+      display: inline-block;
+      padding: 0.9rem 2.5rem;
+      background: white;
+      color: var(--ocean);
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+    }
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: white;
+      opacity: 0.5;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 36px;
+      background: white;
+      animation: pulse-line 2s ease-in-out infinite;
+    }
+    @keyframes pulse-line {
+      0%, 100% { opacity: 0.5; transform: scaleY(1); }
+      50%       { opacity: 0.2; transform: scaleY(0.6); }
+    }
+
+    /* ===== WAVE DIVIDERS ===== */
+    .wave {
+      display: block;
+      overflow: hidden;
+      line-height: 0;
+      margin-top: -1px;
+    }
+    .wave svg { display: block; width: 100%; }
+
+    /* ===== GENERIC SECTION ===== */
+    .section { padding: 5.5rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cliff);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+      font-weight: 700;
+      color: var(--ocean);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .section-title.light { color: white; }
+    .body-text {
+      font-size: 1.05rem;
+      color: var(--mid);
+      line-height: 1.85;
+      max-width: 580px;
+    }
+    .body-text.wide { max-width: 100%; }
+
+    /* ===== CHEGADA / INFO CARDS ===== */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+    .info-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.75rem;
+      box-shadow: 0 4px 28px rgba(26,95,106,0.09);
+      border: 1px solid rgba(26,95,106,0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 40px rgba(26,95,106,0.14);
+    }
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--ocean-light);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.25rem;
+    }
+    .card-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cliff);
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+    .card-value {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--ocean);
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .card-detail { font-size: 0.9rem; color: var(--mid); line-height: 1.55; }
+
+    /* ===== WIFI ===== */
+    .wifi-box {
+      background: var(--ocean);
+      border-radius: var(--radius-lg);
+      padding: 3rem 3.5rem;
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      margin-top: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .wifi-box::before {
+      content: '';
+      position: absolute;
+      right: -80px; top: -80px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .wifi-box::after {
+      content: '';
+      position: absolute;
+      right: 60px; bottom: -100px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .wifi-emoji { font-size: 3.5rem; flex-shrink: 0; }
+    .wifi-inner { position: relative; z-index: 1; }
+    .wifi-sub {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.35rem;
+    }
+    .wifi-network {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1.25rem;
+    }
+    .wifi-pass-row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .wifi-pass-label { color: rgba(255,255,255,0.6); font-size: 0.85rem; }
+    .wifi-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255,255,255,0.13);
+      border-radius: 10px;
+      padding: 0.7rem 1.4rem;
+      color: white;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: background 0.2s;
+    }
+    .wifi-pill:hover { background: rgba(255,255,255,0.22); }
+    .copy-hint { font-size: 0.75rem; opacity: 0.55; }
+
+    /* ===== SPLIT LAYOUT ===== */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .split.flip { direction: rtl; }
+    .split.flip > * { direction: ltr; }
+    .split-img {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+    }
+    .split-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .split-img:hover img { transform: scale(1.05); }
+
+    /* ===== AMENITIES ===== */
+    .amenities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+      gap: 0.9rem;
+      margin-top: 3rem;
+    }
+    .amenity {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      background: white;
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+      border: 1px solid rgba(26,95,106,0.08);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .amenity:hover {
+      border-color: rgba(26,95,106,0.2);
+      box-shadow: 0 4px 16px rgba(26,95,106,0.08);
+    }
+    .amenity-ico { font-size: 1.35rem; flex-shrink: 0; }
+    .amenity-name { font-size: 0.92rem; font-weight: 600; }
+
+    /* ===== GALLERY ===== */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 230px;
+      gap: 0.75rem;
+      margin-top: 3rem;
+    }
+    .gal-item {
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .gal-item.tall  { grid-row: span 2; }
+    .gal-item.wide  { grid-column: span 2; }
+    .gal-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.55s ease;
+    }
+    .gal-item:hover img { transform: scale(1.06); }
+
+    /* ===== RULES ===== */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .rule {
+      display: flex;
+      gap: 1.1rem;
+      align-items: flex-start;
+      background: white;
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      border-left: 3px solid var(--cliff);
+    }
+    .rule-ico { font-size: 1.25rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .rule-body { font-size: 0.92rem; color: var(--mid); line-height: 1.55; }
+    .rule-body strong { display: block; color: var(--dark); margin-bottom: 0.2rem; font-size: 0.95rem; }
+
+    /* ===== CONTACTS ===== */
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .contact-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.75rem;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    }
+    .contact-ico { font-size: 2.4rem; margin-bottom: 0.75rem; }
+    .contact-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+    .contact-role {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--mid);
+      margin-bottom: 1.25rem;
+    }
+    .contact-btn {
+      display: inline-block;
+      padding: 0.6rem 1.6rem;
+      background: var(--ocean);
+      color: white;
+      border-radius: 100px;
+      font-size: 0.87rem;
+      font-weight: 700;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .contact-btn:hover { background: var(--ocean-mid); transform: translateY(-2px); }
+    .contact-btn.whats { background: #25D366; }
+    .contact-btn.whats:hover { background: #1da851; }
+
+    /* ===== SUNSET BANNER ===== */
+    .sunset-banner {
+      position: relative;
+      height: 420px;
+      overflow: hidden;
+    }
+    .sunset-banner img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+    .sunset-banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(26,95,106,0.7) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+      display: flex;
+      align-items: center;
+      padding: 4rem;
+    }
+    .sunset-text { color: white; max-width: 500px; }
+    .sunset-text .section-title { color: white; font-size: clamp(2rem, 4vw, 3rem); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 3.5rem 2rem;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--sand);
+      margin-bottom: 0.5rem;
+    }
+    .footer-sub { font-size: 0.85rem; opacity: 0.4; }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1.5rem 0;
+      list-style: none;
+    }
+    .footer-links a { font-size: 0.8rem; opacity: 0.5; transition: opacity 0.2s; letter-spacing: 0.08em; text-transform: uppercase; }
+    .footer-links a:hover { opacity: 1; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .split, .split.flip { grid-template-columns: 1fr; gap: 2rem; direction: ltr; }
+      .wifi-box { flex-direction: column; gap: 1.5rem; padding: 2rem; text-align: center; }
+      .wifi-pass-row { justify-content: center; }
+      .gallery { grid-template-columns: 1fr 1fr; }
+      .gal-item.wide { grid-column: span 1; }
+      .gal-item.tall { grid-row: span 1; height: 230px; }
+      .sunset-banner-overlay { padding: 2rem; }
+    }
+    @media (max-width: 560px) {
+      .section { padding: 4rem 1.25rem; }
+      .gallery { grid-template-columns: 1fr; grid-auto-rows: 220px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav id="nav">
+  <span class="nav-logo">🌴 Lar Tropical</span>
+  <ul class="nav-links">
+    <li><a href="#chegada">Chegada</a></li>
+    <li><a href="#o-lar">O Lar</a></li>
+    <li><a href="#regiao">A Região</a></li>
+    <li><a href="#regras">Regras</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Seja muito bem-vindo</p>
+    <h1 class="hero-title">Lar Tropical</h1>
+    <p class="hero-subtitle">O mar como vizinho. O pôr do sol como rotina. A rede esperando por você.</p>
+    <a href="#chegada" class="hero-cta">Ver informações da estadia</a>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Rolar</span>
+    <span class="scroll-line"></span>
+  </div>
+</section>
+
+<!-- wave ocean → cream -->
+<div class="wave">
+  <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="90" style="background:#FAF9F5">
+    <path d="M0,45 C240,90 480,0 720,45 C960,90 1200,10 1440,45 L1440,0 L0,0 Z" fill="#1A5F6A" opacity="0.12"/>
+    <path d="M0,55 C300,10 600,90 900,40 C1100,10 1300,70 1440,50 L1440,0 L0,0 Z" fill="#1A5F6A"/>
+  </svg>
+</div>
+
+<!-- ========== CHEGADA ========== -->
+<section class="section" id="chegada" style="padding-top: 4rem;">
+  <div class="container">
+    <p class="eyebrow">Informações essenciais</p>
+    <h2 class="section-title">Sua chegada</h2>
+    <p class="body-text">Tudo o que você precisa saber para começar a descansar desde o primeiro momento.</p>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="card-icon">🕐</div>
+        <p class="card-label">Check-in</p>
+        <p class="card-value">14h00</p>
+        <p class="card-detail">A partir das 14h. Antecipações sujeitas à disponibilidade — consulte o anfitrião.</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">🌙</div>
+        <p class="card-label">Check-out</p>
+        <p class="card-value">12h00</p>
+        <p class="card-detail">Até o meio-dia. Late check-out sujeito à disponibilidade.</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">📍</div>
+        <p class="card-label">Endereço</p>
+        <p class="card-value" style="font-size:1.05rem; line-height:1.4;">[PREENCHER ENDEREÇO COMPLETO]</p>
+        <p class="card-detail">Use o Google Maps ou Apple Maps para chegar.</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">🔑</div>
+        <p class="card-label">Acesso</p>
+        <p class="card-value" style="font-size:1.05rem;">[CÓDIGO / CHAVE]</p>
+        <p class="card-detail">[Descreva como acessar: cofre, porteiro, entrega de chaves, etc.]</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">🚗</div>
+        <p class="card-label">Estacionamento</p>
+        <p class="card-value" style="font-size:1.1rem;">Na propriedade</p>
+        <p class="card-detail">Vaga exclusiva coberta disponível para hóspedes.</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">🌡️</div>
+        <p class="card-label">Clima</p>
+        <p class="card-value" style="font-size:1.1rem;">Tropical</p>
+        <p class="card-detail">Temperatura amena o ano todo. Ventos constantes e pôr do sol espetacular.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- wave cream → ocean -->
+<div class="wave">
+  <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="90" style="background:#1A5F6A">
+    <path d="M0,0 C360,80 720,0 1080,60 C1260,80 1380,30 1440,50 L1440,90 L0,90 Z" fill="#FAF9F5"/>
+  </svg>
+</div>
+
+<!-- ========== WIFI ========== -->
+<section style="background: var(--ocean); padding: 4rem 2rem;" id="wifi">
+  <div class="container">
+    <p class="eyebrow" style="color: var(--sand);">Conectividade</p>
+    <h2 class="section-title light">Wi-Fi</h2>
+    <div class="wifi-box">
+      <div class="wifi-emoji">📶</div>
+      <div class="wifi-inner">
+        <p class="wifi-sub">Nome da rede</p>
+        <p class="wifi-network">[NOME DA REDE WI-FI]</p>
+        <div class="wifi-pass-row">
+          <p class="wifi-pass-label">Senha:</p>
+          <div class="wifi-pill" onclick="copyWifi()" title="Clique para copiar a senha">
+            <span id="wifiPass">[SENHA DO WI-FI]</span>
+            <span class="copy-hint" id="copyHint">📋 copiar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- wave ocean → cream -->
+<div class="wave">
+  <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="90" style="background:#FAF9F5">
+    <path d="M0,0 C400,90 800,10 1200,70 C1320,88 1400,40 1440,30 L1440,90 L0,90 Z" fill="#1A5F6A"/>
+  </svg>
+</div>
+
+<!-- ========== O LAR ========== -->
+<section class="section" id="o-lar">
+  <div class="container">
+    <p class="eyebrow">Conheça</p>
+    <h2 class="section-title">O Lar Tropical</h2>
+    <div class="split" style="margin-bottom: 5rem;">
+      <div class="split-img">
+        <img src="fachada.jpg" alt="Fachada do Lar Tropical ao entardecer" loading="lazy">
+      </div>
+      <div>
+        <p class="body-text" style="margin-bottom: 1.5rem;">
+          Uma casa pensada para quem ama o mar de verdade. Com vista para o oceano de praticamente todos os cômodos, o Lar Tropical une conforto moderno ao charme rústico do litoral nordestino.
+        </p>
+        <p class="body-text">
+          Área de lazer com rede, deck de madeira, sofás ao ar livre e churrasqueira — tudo com o mar de fundo. Uma varanda onde o tempo passa diferente.
+        </p>
+      </div>
+    </div>
+
+    <!-- Quartos -->
+    <p class="eyebrow">Acomodações</p>
+    <h2 class="section-title">Os Quartos</h2>
+    <div class="split" style="margin-bottom: 4rem;">
+      <div class="split-img">
+        <img src="quarto1.jpg" alt="Quarto principal com decoração tropical" loading="lazy">
+      </div>
+      <div>
+        <h3 style="font-family:var(--font-display); font-size:1.9rem; color:var(--ocean); margin-bottom:1rem; font-weight:700;">Quarto Principal</h3>
+        <p class="body-text">Cama de casal com roupa de cama premium. Decoração tropical com peças em palha e folhagens secas, ar-condicionado e iluminação aconchegante para noites perfeitas.</p>
+      </div>
+    </div>
+    <div class="split flip">
+      <div class="split-img">
+        <img src="quarto2.jpg" alt="Quarto com vista para o mar" loading="lazy">
+      </div>
+      <div>
+        <h3 style="font-family:var(--font-display); font-size:1.9rem; color:var(--ocean); margin-bottom:1rem; font-weight:700;">Vista para o Mar</h3>
+        <p class="body-text">Acorde com o oceano turquesa enquadrado pela janela. Uma das vistas mais bonitas que você já vai ver — diretamente da cama.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== COMODIDADES ========== -->
+<section class="section" style="background: var(--ocean-light);">
+  <div class="container">
+    <p class="eyebrow">O que tem disponível</p>
+    <h2 class="section-title">Comodidades</h2>
+    <div class="amenities-grid">
+      <div class="amenity"><span class="amenity-ico">❄️</span><span class="amenity-name">Ar-condicionado</span></div>
+      <div class="amenity"><span class="amenity-ico">📶</span><span class="amenity-name">Wi-Fi de alta velocidade</span></div>
+      <div class="amenity"><span class="amenity-ico">🍳</span><span class="amenity-name">Cozinha equipada</span></div>
+      <div class="amenity"><span class="amenity-ico">🔥</span><span class="amenity-name">Churrasqueira</span></div>
+      <div class="amenity"><span class="amenity-ico">🛋️</span><span class="amenity-name">Área de estar ao ar livre</span></div>
+      <div class="amenity"><span class="amenity-ico">😴</span><span class="amenity-name">Rede de descanso</span></div>
+      <div class="amenity"><span class="amenity-ico">📺</span><span class="amenity-name">Smart TV</span></div>
+      <div class="amenity"><span class="amenity-ico">🌿</span><span class="amenity-name">Jardim gramado</span></div>
+      <div class="amenity"><span class="amenity-ico">🚿</span><span class="amenity-name">Chuveiro quente</span></div>
+      <div class="amenity"><span class="amenity-ico">🚗</span><span class="amenity-name">Estacionamento</span></div>
+      <div class="amenity"><span class="amenity-ico">☕</span><span class="amenity-name">Cafeteira</span></div>
+      <div class="amenity"><span class="amenity-ico">🌊</span><span class="amenity-name">Acesso à praia</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== GALERIA ========== -->
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">Galeria</p>
+    <h2 class="section-title">O seu paraíso</h2>
+    <div class="gallery">
+      <div class="gal-item tall">
+        <img src="varanda.jpg" alt="Varanda com sofás ao ar livre e vista para o mar" loading="lazy">
+      </div>
+      <div class="gal-item">
+        <img src="sala-jantar.jpg" alt="Mesa de jantar com louças" loading="lazy">
+      </div>
+      <div class="gal-item">
+        <img src="cafe.jpg" alt="Café da manhã tropical" loading="lazy">
+      </div>
+      <div class="gal-item wide">
+        <img src="jardim.jpg" alt="Jardim com churrasqueira e vista para o mar" loading="lazy">
+      </div>
+      <div class="gal-item">
+        <img src="por-do-sol.jpg" alt="Pôr do sol sobre o oceano" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SUNSET BANNER ========== -->
+<div class="sunset-banner">
+  <img src="aerea.jpg" alt="Vista aérea das falésias e do oceano" loading="lazy">
+  <div class="sunset-banner-overlay">
+    <div class="sunset-text">
+      <p class="eyebrow" style="color:var(--sand);">O melhor dos dois mundos</p>
+      <h2 class="section-title" style="color:white; font-size:clamp(2rem,4vw,3rem);">Natureza que tira o fôlego</h2>
+      <p style="color:rgba(255,255,255,0.85); font-size:1rem; line-height:1.75; max-width:420px;">Falésias avermelhadas, mar turquesa e praias que parecem ter sido feitas para você. Tudo isso a poucos passos.</p>
+    </div>
+  </div>
+</div>
+
+<!-- wave cream → sand -->
+<div class="wave">
+  <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="80" style="background:#F0E6CC">
+    <path d="M0,0 C480,80 960,0 1440,60 L1440,80 L0,80 Z" fill="#FAF9F5"/>
+  </svg>
+</div>
+
+<!-- ========== REGIÃO ========== -->
+<section class="section" id="regiao" style="background: var(--sand);">
+  <div class="container">
+    <p class="eyebrow">Ao redor</p>
+    <h2 class="section-title">A Região</h2>
+    <div class="split" style="margin-bottom: 3.5rem;">
+      <div class="split-img">
+        <img src="por-do-sol-aero.jpg" alt="Pôr do sol aéreo sobre a costa" loading="lazy">
+      </div>
+      <div>
+        <p class="body-text" style="margin-bottom:1.5rem;">
+          A costa aqui é de encher os olhos: falésias avermelhadas, mar turquesa cristalino e praias praticamente desertas. Um cenário que parece saído de um cartão postal.
+        </p>
+        <p class="body-text">
+          A poucos minutos você encontra restaurantes de frutos do mar, kite e windsurf, passeios de buggy pelas dunas e muito mais.
+        </p>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="card-icon">🌊</div>
+        <p class="card-label">Praia</p>
+        <p class="card-value" style="font-size:1.1rem;">A poucos passos</p>
+        <p class="card-detail">Acesso fácil a pé. Águas calmas e cristalinas.</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">🦐</div>
+        <p class="card-label">Gastronomia</p>
+        <p class="card-value" style="font-size:1.1rem;">Frutos do mar</p>
+        <p class="card-detail">Restaurantes locais com frutos do mar frescos, tapioca e café natural.</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">🪁</div>
+        <p class="card-label">Esportes</p>
+        <p class="card-value" style="font-size:1.1rem;">Kite & Windsurf</p>
+        <p class="card-detail">Condições perfeitas de vento para esportes aquáticos o ano todo.</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">🚙</div>
+        <p class="card-label">Passeios</p>
+        <p class="card-value" style="font-size:1.1rem;">Buggy & Cavalo</p>
+        <p class="card-detail">Passeios de buggy nas dunas, cavalo e lancha disponíveis na região.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- wave sand → cream -->
+<div class="wave">
+  <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="80" style="background:#FAF9F5">
+    <path d="M0,80 C360,20 720,80 1080,30 C1260,8 1380,55 1440,40 L1440,0 L0,0 Z" fill="#F0E6CC"/>
+  </svg>
+</div>
+
+<!-- ========== REGRAS ========== -->
+<section class="section" id="regras">
+  <div class="container">
+    <p class="eyebrow">Importante</p>
+    <h2 class="section-title">Regras da Casa</h2>
+    <p class="body-text" style="margin-bottom: 0;">Para que todos tenham a melhor experiência possível, pedimos atenção a estes pontos.</p>
+    <div class="rules-grid">
+      <div class="rule">
+        <span class="rule-ico">🔇</span>
+        <span class="rule-body"><strong>Silêncio após 22h</strong>Respeite o sossego dos vizinhos e da natureza ao redor.</span>
+      </div>
+      <div class="rule">
+        <span class="rule-ico">🚬</span>
+        <span class="rule-body"><strong>Não é permitido fumar</strong>Proibido fumar em áreas internas. Nas áreas externas, use cinzeiros.</span>
+      </div>
+      <div class="rule">
+        <span class="rule-ico">🐾</span>
+        <span class="rule-body"><strong>Animais de estimação</strong>Consulte o anfitrião previamente sobre pets.</span>
+      </div>
+      <div class="rule">
+        <span class="rule-ico">🧹</span>
+        <span class="rule-body"><strong>Deixe como encontrou</strong>Cuide do espaço como se fosse seu. Descarte o lixo nos locais indicados.</span>
+      </div>
+      <div class="rule">
+        <span class="rule-ico">👥</span>
+        <span class="rule-body"><strong>Capacidade máxima</strong>Respeite o número de hóspedes informado na reserva. Visitas devem ser avisadas.</span>
+      </div>
+      <div class="rule">
+        <span class="rule-ico">💡</span>
+        <span class="rule-body"><strong>Economia de energia</strong>Desligue o ar-condicionado e as luzes ao sair dos cômodos.</span>
+      </div>
+      <div class="rule">
+        <span class="rule-ico">🌊</span>
+        <span class="rule-body"><strong>Respeite o ambiente</strong>Não deixe lixo na praia ou nas falésias. Cuide da natureza que torna tudo isso possível.</span>
+      </div>
+      <div class="rule">
+        <span class="rule-ico">🍳</span>
+        <span class="rule-body"><strong>Cozinha e utensílios</strong>Lave os utensílios após o uso e deixe a cozinha organizada.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- wave cream → ocean -->
+<div class="wave">
+  <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="90" style="background:#1A5F6A">
+    <path d="M0,0 C360,80 720,0 1080,60 C1260,80 1380,30 1440,50 L1440,90 L0,90 Z" fill="#FAF9F5"/>
+  </svg>
+</div>
+
+<!-- ========== CONTATO ========== -->
+<section style="background: var(--ocean); padding: 5rem 2rem;" id="contato">
+  <div class="container">
+    <p class="eyebrow" style="color: var(--sand);">Precisando de ajuda?</p>
+    <h2 class="section-title light">Contatos</h2>
+    <div class="contacts-grid">
+      <div class="contact-card">
+        <p class="contact-ico">🏠</p>
+        <p class="contact-name">[Nome do Anfitrião]</p>
+        <p class="contact-role">Anfitrião</p>
+        <a href="https://wa.me/55[NÚMERO SEM ESPAÇO]" class="contact-btn whats">💬 WhatsApp</a>
+      </div>
+      <div class="contact-card">
+        <p class="contact-ico">🚨</p>
+        <p class="contact-name">SAMU</p>
+        <p class="contact-role">Emergência Médica</p>
+        <a href="tel:192" class="contact-btn">Ligar: 192</a>
+      </div>
+      <div class="contact-card">
+        <p class="contact-ico">🚔</p>
+        <p class="contact-name">Polícia Militar</p>
+        <p class="contact-role">Segurança</p>
+        <a href="tel:190" class="contact-btn">Ligar: 190</a>
+      </div>
+      <div class="contact-card">
+        <p class="contact-ico">🏥</p>
+        <p class="contact-name">[Hospital / UPA Local]</p>
+        <p class="contact-role">Saúde</p>
+        <a href="tel:[NÚMERO]" class="contact-btn">[Número]</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="footer-logo">🌴 Lar Tropical</div>
+  <ul class="footer-links">
+    <li><a href="#chegada">Chegada</a></li>
+    <li><a href="#o-lar">O Lar</a></li>
+    <li><a href="#regiao">Região</a></li>
+    <li><a href="#regras">Regras</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <p class="footer-sub">Guia do Hóspede — Feito com 🌊 e ☀️ para a sua melhor estadia</p>
+</footer>
+
+<script>
+  // Nav transparente → teal no scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 70);
+  });
+
+  // Copiar senha do Wi-Fi
+  function copyWifi() {
+    const pass = document.getElementById('wifiPass').textContent;
+    const hint = document.getElementById('copyHint');
+    navigator.clipboard.writeText(pass).then(() => {
+      hint.textContent = '✅ copiado!';
+      setTimeout(() => hint.textContent = '📋 copiar', 2500);
+    }).catch(() => {
+      hint.textContent = '⚠️ copie manualmente';
+    });
+  }
+
+  // Fade-in suave nas seções ao rolar
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.info-card, .amenity, .rule, .contact-card, .split-img, .gal-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
